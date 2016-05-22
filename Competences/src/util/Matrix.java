@@ -1,8 +1,8 @@
 package util;
 
-import java.util.Arrays;
-
 import happy.coding.math.Maths;
+
+import java.util.Arrays;
 
 
 public class Matrix {

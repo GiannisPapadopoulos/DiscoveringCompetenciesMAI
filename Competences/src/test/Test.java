@@ -18,22 +18,24 @@ public class Test {
 		List<String> studentIDs = DataExtractor.getValuesAt(content, 0);
 		List<String> courseIDs = min!=-1 ? DataExtractor.getSufficientCourses(content, min) : DataExtractor.getValuesAt(content, 1);
 		double[][] matrix = DataExtractor.getValueMatrix(content, studentIDs, courseIDs, timeLimit);
-	
-		
 		
 		String[][] out = DataWriter.combineCSV(studentIDs, courseIDs, outMatrix(matrix));
     DataWriter.printCSVData(out, "output/cleanded.csv");
-		
-		double[][] winit = NMF.random(matrix.length, 2);
-		double[][] hinit = NMF.random(2, matrix[0].length);
 
-		NMF.MultResult nmf = NMF.nmf(matrix, winit, hinit, 0.001, 1000);
+    int dimension = 4;
+    double[][] winit = NMF.random(matrix.length, dimension);
+		double[][] hinit = NMF.random(dimension, matrix[0].length);
+
+    int maxiter = 500;
+    NMF.MultResult nmf = NMF.nmf(matrix, winit, hinit, 0.001, maxiter);
 		double[][] result = nmf.matrix.mult(nmf.grad).saved;
-		
+
 		out = DataWriter.combineCSV(studentIDs, courseIDs, outMatrix(result));
+
     DataWriter.printCSVData(out, "output/nmfResult.csv");
 	}
 	
+
 	public static double[][] outMatrix(double[][] matrix){
 		double[][] outMatrix = new double[matrix.length][matrix[0].length];
 		for(int i=0;i<matrix.length;i++)

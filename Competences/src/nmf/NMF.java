@@ -42,11 +42,16 @@ public class NMF {
 
 			if (h.iter == 0) {
 				tolH *= 0.1;
-			}
-			if (i % 100 == 0)
-				System.out.println("Step:" + i + "\t" + projnorm + "\t" + tolW + "\t" + tolH + "\t" + new Date());
-		}
-
+      }
+      if (i % 100 == 0) {
+        double absError = calculateAbsoluteError(V, W, H);
+        // Average error per element
+        double avgError = absError / (V.saved.length * V.saved[0].length);
+        System.out.println("Step:" + i + "\t" + projnorm + "\t" + tolW + "\t" + tolH + "\t" + avgError + "\t"
+                           + new Date());
+      }
+    }
+		
 		return new MultResult(W, H, i);
 	}
 
@@ -103,6 +108,21 @@ public class NMF {
 
 		return new MultResult(H, grad, iter);
 	}
+
+  /**
+   * Calculates the absolute error of the decomposition of matrix V into W and H, abs(V - W*H)
+   */
+  public static double calculateAbsoluteError(Matrix V, Matrix W, Matrix H) {
+    double[][] result = W.mult(H).saved;
+
+    double absoluteError = 0;
+    for (int i = 0; i < V.saved.length; i++) {
+      for (int j = 0; j < V.saved[0].length; j++) {
+        absoluteError += Math.abs(V.saved[i][j] - result[i][j]);
+      }
+    }
+    return absoluteError;
+  }
 
 	public static class MultResult {
 		public Matrix matrix;
