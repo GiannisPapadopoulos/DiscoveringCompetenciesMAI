@@ -1,9 +1,9 @@
 package preprocessing;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
+
+import util.Matrix;
 
 public class DataWriter {
 
@@ -30,5 +30,16 @@ public class DataWriter {
 			writer.write("\n");
 		}
 		writer.close();
-	}
+  }
+
+  public static void exportMatrixToCsv(Matrix M, String fileName) throws IOException {
+    FileWriter writer = new FileWriter(new File(fileName));
+    for (int i = 0; i < M.saved.length; i++) {
+      for (int j = 0; j < M.saved[i].length; j++) {
+        writer.write(M.saved[i][j] + ",");
+      }
+      writer.write("\n");
+    }
+    writer.close();
+  }
 }

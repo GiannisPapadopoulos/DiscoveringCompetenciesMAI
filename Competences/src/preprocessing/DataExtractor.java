@@ -1,10 +1,6 @@
 package preprocessing;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import util.Times;
 
@@ -27,6 +23,11 @@ public class DataExtractor {
 	public static double[][] getValueMatrix(List<String[]> content,
 			List<String> studentIDs, List<String> courseIDs, String timeLimit) {
 		double[][] matrix = new double[studentIDs.size()][courseIDs.size()];
+    // Fill with -1 to keep track of missing grades
+    for (int i = 0; i < matrix.length; i++) {
+      Arrays.fill(matrix[i], -1);
+    }
+
 		int[][] times = new int[studentIDs.size()][courseIDs.size()];
 		int limit = timeLimit == null ? -1 : Times.parse(timeLimit);
 		for (String[] line : content) {
@@ -34,7 +35,7 @@ public class DataExtractor {
 				continue;
 			int row = studentIDs.indexOf(line[0]);
 			int col = courseIDs.indexOf(line[1]);
-			double grade = Double.parseDouble(line[2]) + 1;
+      double grade = Double.parseDouble(line[2]);
 			int time = Times.parse(line[3]);
 
 			if (times[row][col] == 0) {

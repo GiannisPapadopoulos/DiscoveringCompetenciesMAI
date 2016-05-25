@@ -25,6 +25,14 @@ public class Matrix {
 		this(m.saved);
 	}
 
+  public int length() {
+    return m;
+  }
+
+  public int width() {
+    return n;
+  }
+
 	public Matrix mult(Matrix m2) {
 		double[][] out = new double[this.m][m2.n];
 		for (int i = 0; i < this.m; i++) {
@@ -128,6 +136,16 @@ public class Matrix {
 		return new Matrix(out);
 	}
 
+  public Matrix dotDivide(Matrix d) {
+    double[][] out = new double[m][n];
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        out[i][j] = saved[i][j] / d.saved[i][j];
+      }
+    }
+    return new Matrix(out);
+  }
+
 	public double sumValues() {
 		double sum = 0;
 		for (int i = 0; i < m; i++)
@@ -136,6 +154,26 @@ public class Matrix {
 		return sum;
 	}
 	
+  public boolean containsNegativeEntries() {
+    for (int i = 0; i < saved.length; i++) {
+      for (int j = 0; j < saved[0].length; j++) {
+        if (saved[i][j] < 0)
+          return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean containsNaN() {
+    for (int i = 0; i < saved.length; i++) {
+      for (int j = 0; j < saved[0].length; j++) {
+        if (Double.isNaN(saved[i][j]))
+          return true;
+      }
+    }
+    return false;
+  }
+
 	public boolean equals(Matrix obj) {
 		if(obj == null)
 			return false;
@@ -150,4 +188,13 @@ public class Matrix {
 			builder.append(Arrays.toString(row)+"\n");
 		return builder.toString();
 	}
+
+  /** Constructs a random row*col matrix with entries in the range [0,1) */
+  public static Matrix random(int row, int col) {
+    double[][] out = new double[row][col];
+    for (int i = 0; i < row; i++)
+      for (int j = 0; j < col; j++)
+        out[i][j] = Math.random();
+    return new Matrix(out);
+  }
 }
